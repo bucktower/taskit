@@ -5,4 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- WELCOME SCREEN -->
+    <string name="greeting_title">Welcome to Taskit!</string>
+
 </resources>
