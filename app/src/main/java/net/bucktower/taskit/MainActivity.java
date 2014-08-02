@@ -4,14 +4,33 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.content.Context;
+
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
+
+import net.bucktower.taskit.tasks.Task;
 
 
 public class MainActivity extends Activity {
+
+    private EditText mTaskInput = (EditText)findViewById(R.id.task_input);
+    private ListView mListView = (ListView)findViewById(R.id.task_list);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Initializing Parse
+        Parse.initialize(this,
+                "csWV1lbGaqSsYrQs0zF5apAV1dIE5POdmhGwvMVn",
+                "WNF3VlMUk2Erx4uH0KXltrCSmXaUAxSZPlKz4dOA");
+        ParseAnalytics.trackAppOpened(getIntent());
+        ParseObject.registerSubclass(Task.class);
     }
 
 
@@ -32,5 +51,22 @@ public class MainActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createTask(){
+        if (mTaskInput.getText().length() > 0){
+            Task t = new Task();
+            t.setDescription(mTaskInput.getText().toString());
+            t.setCompleted(false);
+            t.saveEventually();
+            mTaskInput.setText("");
+        }else{
+            Context context = getApplicationContext();
+            CharSequence textEmptyInput = "Nothing to add!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, textEmptyInput, duration);
+            toast.show();
+        }
     }
 }
